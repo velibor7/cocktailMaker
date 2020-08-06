@@ -11,7 +11,7 @@ router.get("", cocktailControllers.getCocktails);
 
 router.get("/:cid", cocktailControllers.getCocktailById);
 
-router.get("/user/:uid", cocktailControllers.getCocktailByUserId);
+router.get("/user/:uid", cocktailControllers.getCocktailsByUserId);
 
 // router.use(checkAuth);
 /*

@@ -33,6 +33,7 @@ const getCocktailById = async (req, res, next) => {
 
   let cocktail;
   try {
+    console.log("TRYIN");
     cocktail = await Cocktail.findById(cocktailId);
   } catch (err) {
     const error = new HttpError("Could not find a cocktail", 500);

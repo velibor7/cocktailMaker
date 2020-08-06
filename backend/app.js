@@ -26,8 +26,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// app.use("`/api/cocktails", cocktailsRoutes);
-// app.use("/api/users", usersRoutes);
+// app.use("/api/cocktails", cocktailsRoutes);
+app.use("/api/users", usersRoutes);
 
 app.use((req, res, next) => {
   const error = new HttpError(
@@ -59,7 +59,10 @@ app.listen(5000);
 // compass - mongodb+srv://wony:<password>@cluster0.jjujd.mongodb.net/test
 
 mongoose
-  .connect(`mongo link`)
+  .connect(
+    `mongodb+srv://wony:<password>@cluster0.jjujd.mongodb.net/test
+  `
+  )
   .then(() => {
     console.log("connected to db");
   })

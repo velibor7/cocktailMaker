@@ -7,9 +7,11 @@ const checkAuth = require("../middleware/check-auth");
 
 const router = express.Router();
 
-//router.get("/:cid", cocktailControllers.getCocktailById);
+router.get("", cocktailControllers.getCocktails);
 
-// router.get("/user/:uid", cocktailControllers.getCocktailByUserId);
+router.get("/:cid", cocktailControllers.getCocktailById);
+
+router.get("/user/:uid", cocktailControllers.getCocktailByUserId);
 
 // router.use(checkAuth);
 /*
@@ -29,8 +31,6 @@ router.patch(
 );
 */
 
-/*
 router.delete("/:cid", cocktailControllers.deleteCocktail);
-*/
 
 module.exports = router;

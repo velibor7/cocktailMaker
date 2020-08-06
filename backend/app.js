@@ -56,7 +56,7 @@ app.listen(5000);
 
 // shell: mongo "mongodb+srv://cluster0.jjujd.mongodb.net/<dbname>" --username wony
 // wony - zloTOjUvfAgqUuIO
-// compass - mongodb+srv://wony:<password>@cluster0.jjujd.mongodb.net/test
+// compass - mongodb+srv://wony:zloTOjUvfAgqUuIO@cluster0.jjujd.mongodb.net/test
 
 mongoose
   .connect(

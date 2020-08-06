@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 
 const HttpError = require("../models/http-error");
 const User = require("../models/user");
+const { create } = require("../models/user");
 
 const getUsers = async (req, res, next) => {
   let users;
@@ -25,6 +26,7 @@ const signup = async (req, res, next) => {
   }
 
   const { name, email, password } = req.body;
+
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
@@ -32,10 +34,53 @@ const signup = async (req, res, next) => {
     const error = new HttpError("Signup failed, try again later", 500);
     return next(error);
   }
+
+  if (existingUser) {
+    const error = new HttpError("User exists! Please login!", 422);
+    return next(error);
+  }
+
+  const createdUser = new User({
+    name,
+    email,
+    image: "www.somesite.com/someimage",
+    password,
+    cocktails: [],
+  });
+
+  try {
+    await createdUser.save();
+  } catch (err) {
+    const error = new HttpError("Signing up failed, try again", 500);
+    return next(error);
+  }
+
+  res.status(201).json({ user: createdUser.toObject({ getters: true }) });
 };
 
 const login = async (req, res, next) => {
-  return 1;
+  const { email, password } = req.body;
+  let existingUser;
+
+  try {
+    existingUser = await User.findOne({ email: email });
+  } catch (err) {
+    const error = new HttpError("Logging in failed, try again later", 500);
+
+    return next(errror);
+  }
+
+  if (!existingUser || existingUser.password !== password) {
+    const error = new HttpError(
+      "Invalid credentials, could not log you in.",
+      401
+    );
+    return next(error);
+  }
+  res.json({
+    message: "Logged in!",
+    user: existingUser.toObject({ getters: true }),
+  });
 };
 
 exports.getUsers = getUsers;

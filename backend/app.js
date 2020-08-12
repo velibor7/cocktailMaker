@@ -7,26 +7,26 @@ const mongoose = require("mongoose");
 
 const cocktailsRoutes = require("./routes/cocktails-routes");
 const usersRoutes = require("./routes/users-routes");
-const HttpError = require("./models/http-error").default;
+const HttpError = require("./models/http-error");
 
 const app = express();
 
 app.use(bodyParser.json());
 
-// app.use('/uploads/images', express.static(path.join('uploads', 'images'))
+app.use("/uploads/images", express.static(path.join("uploads", "images")));
 
 app.use((req, res, next) => {
+  // req.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
-
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE");
+  res.setHeader("Access-Control-Allow-Methods", "*");
   next();
 });
 
-// app.use("/api/cocktails", cocktailsRoutes);
+app.use("/api/cocktails", cocktailsRoutes);
 app.use("/api/users", usersRoutes);
 
 app.use((req, res, next) => {
@@ -49,23 +49,20 @@ app.use((error, req, res, next) => {
   }
 
   res.status(error.code || 500);
-  res.json({ message: error.message || "An unkwno error occured." });
+  res.json({ message: error.message || "An unknown error occured." });
 });
 
-app.listen(5000);
-
-// shell: mongo "mongodb+srv://cluster0.jjujd.mongodb.net/<dbname>" --username wony
-// wony - zloTOjUvfAgqUuIO
-// compass - mongodb+srv://wony:zloTOjUvfAgqUuIO@cluster0.jjujd.mongodb.net/test
+// UBaIP5ESYxckdTjJ
 
 mongoose
   .connect(
-    `mongodb+srv://wony:<password>@cluster0.jjujd.mongodb.net/test
-  `
+    "mongodb+srv://wony:UBaIP5ESYxckdTjJ@cluster0.d46ew.mongodb.net/test?retryWrites=true&w=majority"
   )
   .then(() => {
-    console.log("connected to db");
+    console.log("successfully connected to db");
+    app.listen(5000);
   })
   .catch((err) => {
+    console.log("failed to connect to db");
     console.log(err);
   });

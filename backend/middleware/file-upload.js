@@ -24,3 +24,5 @@ const fileUpload = multer({
     cb(error, isValid);
   },
 });
+
+module.exports = fileUpload;

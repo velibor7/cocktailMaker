@@ -13,23 +13,20 @@ router.get("/:cid", cocktailControllers.getCocktailById);
 
 router.get("/user/:uid", cocktailControllers.getCocktailsByUserId);
 
-// router.use(checkAuth);
-/*
+router.use(checkAuth);
+
 router.post(
   "/",
   fileUpload.single("image"),
-  [check("title").not().isEmpty(), check("desciption").isLength({ min: 5 })],
+  [check("title").not().isEmpty(), check("description").isLength({ min: 6 })],
   cocktailControllers.createCocktail
 );
-*/
 
-/*
 router.patch(
   "/:cid",
   [check("title").not().isEmpty(), check("description").isLength({ min: 5 })],
   cocktailControllers.updateCocktail
 );
-*/
 
 router.delete("/:cid", cocktailControllers.deleteCocktail);
 

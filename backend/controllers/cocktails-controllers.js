@@ -6,7 +6,6 @@ const mongoose = require("mongoose");
 const HttpError = require("../models/http-error");
 const Cocktail = require("../models/cocktail");
 const User = require("../models/user");
-const { update } = require("../models/user");
 
 const getCocktails = async (req, res, next) => {
   let cocktails;
@@ -75,24 +74,28 @@ const getCocktailsByUserId = async (req, res, next) => {
 };
 
 const createCocktail = async (req, res, next) => {
+  // console.log("trying to create a cocktail...");
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
+    console.log(errors);
     return next(new HttpError("Invalid inputs, check data.", 422));
   }
 
-  const { title, description, creator } = req.body;
+  const { title, description } = req.body;
 
   const createdCocktail = new Cocktail({
     title,
     description,
-    image: "www.some-link.com/image.jpg",
-    creator,
+    // image: req.file.path,
+    creator: req.userData.userId,
   });
+
+  console.log(createdCocktail);
 
   let user;
   try {
-    user = await User.findById(creator);
+    user = await User.findById(req.userData.userId);
   } catch (err) {
     const error = new HttpError("Creating cocktail failed, try again.", 500);
     return next(error);
@@ -103,15 +106,24 @@ const createCocktail = async (req, res, next) => {
     next(error);
   }
 
+  // console.log("user: " + user);
+
   try {
+    Cocktail.createCollection();
     const sess = await mongoose.startSession();
     sess.startTransaction();
     await createdCocktail.save({ session: sess });
+    console.log("idkkkk");
     user.cocktails.push(createdCocktail);
     await user.save({ session: sess });
     await sess.commitTransaction();
+    // console.log("idk");
   } catch (err) {
-    const error = new HttpError("Creating cocktail failed, try again.", 500);
+    console.log(err);
+    const error = new HttpError(
+      "Creating cocktail failed in session, try again.",
+      500
+    );
     return next(error);
   }
 
@@ -137,6 +149,15 @@ const updateCocktail = async (req, res, next) => {
 
     return next(error);
   }
+
+  if (cocktail.creator.toString() !== req.userData.userId) {
+    const error = new HttpError(
+      "You are not allowed to edit this cocktail.",
+      401
+    );
+    return next(error);
+  }
+
   cocktail.title = title;
   cocktail.description = description;
 
@@ -172,6 +193,13 @@ const deleteCocktail = async (req, res, next) => {
     return next(error);
   }
 
+  if (cocktail.creator.id !== req.userData.userId) {
+    const error = new HttpError("You are not allowed to delete this.", 401);
+    return next(error);
+  }
+
+  const imagePath = cocktail.image;
+
   try {
     const sess = await mongoose.startSession();
     sess.startTransaction();
@@ -186,6 +214,10 @@ const deleteCocktail = async (req, res, next) => {
     );
     return next(error);
   }
+
+  fs.unlink(imagePath, (err) => {
+    console.log(err);
+  });
 
   res.status(200).json({ message: "Cocktail deleted." });
 };

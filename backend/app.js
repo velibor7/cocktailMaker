@@ -39,7 +39,8 @@ app.use((req, res, next) => {
 
 app.use((error, req, res, next) => {
   if (req.file) {
-    fs.unline(req.file.path, (err) => {
+    console.log("ovde sam");
+    fs.unlink(req.file.path, (err) => {
       console.log(err);
     });
   }

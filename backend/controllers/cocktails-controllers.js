@@ -83,11 +83,13 @@ const createCocktail = async (req, res, next) => {
   }
 
   const { title, description } = req.body;
+  console.log(req.file);
+  console.log(req.file.path);
 
   const createdCocktail = new Cocktail({
     title,
     description,
-    // image: req.file.path,
+    image: req.file.path,
     creator: req.userData.userId,
   });
 

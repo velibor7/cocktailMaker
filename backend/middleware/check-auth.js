@@ -12,7 +12,7 @@ module.exports = (req, res, next) => {
       console.log("Auth failed in check-auth middleware");
       throw new Error("Auth failed in check-auth middleware");
     }
-    console.log("token: " + token);
+    // console.log("token: " + token);
     const decodedToken = jwt.verify(token, "secret");
     req.userData = { userId: decodedToken.userId };
     next();

@@ -1,17 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 
 import Card from "../../shared/components/UIElements/Card";
+import Spinner from "../../shared/components/UIElements/Spinner";
 import Button from "../../shared/components/FormElements/Button";
 import Modal from "../../shared/components/UIElements/Modal";
 
 import "./CocktailItem.css";
 import { useHttpClient } from "../../shared/hooks/http-hook";
+import { AuthContext } from "../../shared/context/auth-context";
 
 const CocktailItem = (props) => {
   const { isLoading, error, sendRequest, clearError } = useHttpClient();
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [showDetailsModal, setShowDetailsModal] = useState(false);
-
+  const auth = useContext(AuthContext);
   const showDeleteWarningHandler = () => {
     setShowConfirmModal(true);
   };
@@ -25,13 +27,18 @@ const CocktailItem = (props) => {
   };
   const confirmDeleteHandler = async () => {
     setShowConfirmModal(false);
+
     try {
       await sendRequest(
         `http://localhost:5000/api/cocktails/${props.id}`,
-        "DELETE"
+        "DELETE",
+        null,
+        { Authorization: "Bearer " + auth.token }
       );
       props.onDelete(props.id);
-    } catch (err) {}
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const popDetailsModal = () => {
@@ -81,7 +88,7 @@ const CocktailItem = (props) => {
       </Modal>
       <li className="cocktail-item" onClick={popDetailsModal}>
         <Card className="cocktail-item__content">
-          {isLoading && <p>Loading...</p>}
+          {isLoading && <Spinner />}
           <div className="cocktail-item__image">
             <img
               src={`http://localhost:5000/${props.image}`}
@@ -92,14 +99,6 @@ const CocktailItem = (props) => {
           <div className="cocktail-item__info">
             <h2>{props.title}</h2>
           </div>
-          {/*
-          <div className="cocktail-item__actions">
-          <Button to={`cocktails/${props.id}`}>EDIT</Button>
-          <Button danger onClick={showDeleteWarningHandler}>
-          DELETE
-          </Button>
-          </div>
-        */}
         </Card>
       </li>
     </React.Fragment>

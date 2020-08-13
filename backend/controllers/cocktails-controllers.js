@@ -183,10 +183,11 @@ const updateCocktail = async (req, res, next) => {
 
 const deleteCocktail = async (req, res, next) => {
   const cocktailId = req.params.cid;
+  console.log(cocktailId);
 
   let cocktail;
   try {
-    cocktail = await (await Cocktail.findById(cocktailId)).populate("creator");
+    cocktail = await Cocktail.findById(cocktailId).populate("creator");
   } catch (err) {
     const error = new HttpError(
       "Something went wrong, could not delete cocktail.",

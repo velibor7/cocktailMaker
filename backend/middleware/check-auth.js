@@ -18,6 +18,7 @@ module.exports = (req, res, next) => {
     next();
   } catch (err) {
     const error = new HttpError("Auth Failed!", 403);
+    console.log(err);
     return next(error);
   }
 };

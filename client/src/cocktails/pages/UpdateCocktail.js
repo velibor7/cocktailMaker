@@ -40,10 +40,12 @@ const UpdateCocktail = () => {
 
   useEffect(() => {
     const fetchCocktail = async () => {
+      console.log(cocktailId);
       try {
         const resData = await sendRequest(
           `http://localhost:5000/api/cocktails/${cocktailId}`
         );
+        console.log(resData);
         setLoadedCocktail(resData.cocktail);
         setFormData(
           {
@@ -59,8 +61,9 @@ const UpdateCocktail = () => {
           true
         );
       } catch (err) {}
-      fetchCocktail();
     };
+    //! important
+    fetchCocktail();
   }, [sendRequest, cocktailId, setFormData]);
 
   const cocktailUpdateSubmitHandler = async (event) => {
@@ -104,35 +107,41 @@ const UpdateCocktail = () => {
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      {!isLoading && loadedCocktail && (
-        <form className="cocktail-form" onSubmit={cocktailUpdateSubmitHandler}>
-          <Input
-            id="title"
-            element="input"
-            type="text"
-            label="Title"
-            validators={[VALIDATOR_REQUIRE()]}
-            errorText="plase enter a valid title"
-            onInput={inputHandler}
-            initialValue={loadedCocktail.title}
-            initialValid={true}
-          />
-          <Input
-            id="description"
-            element="textarea"
-            label="Description"
-            validators={[VALIDATOR_MINLENGTH(5)]}
-            errorText="plase enter a valid desc."
-            onInput={inputHandler}
-            initialValue={loadedCocktail.description}
-            initialValid={true}
-          />
+      <Card>
+        {!isLoading && loadedCocktail && (
+          <form
+            className="cocktail-form"
+            onSubmit={cocktailUpdateSubmitHandler}
+          >
+            <Input
+              id="title"
+              element="input"
+              type="text"
+              label="Title"
+              validators={[VALIDATOR_REQUIRE()]}
+              errorText="plase enter a valid title"
+              onInput={inputHandler}
+              initialValue={loadedCocktail.title}
+              initialValid={true}
+            />
+            <Input
+              id="description"
+              element="textarea"
+              label="Description"
+              rows="6"
+              validators={[VALIDATOR_MINLENGTH(5)]}
+              errorText="plase enter a valid desc."
+              onInput={inputHandler}
+              initialValue={loadedCocktail.description}
+              initialValid={true}
+            />
 
-          <Button type="submit" disabled={!formState.isValid}>
-            UPDATE
-          </Button>
-        </form>
-      )}
+            <Button type="submit" disabled={!formState.isValid}>
+              UPDATE
+            </Button>
+          </form>
+        )}
+      </Card>
     </React.Fragment>
   );
 };

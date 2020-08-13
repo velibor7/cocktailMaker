@@ -98,7 +98,7 @@ const Auth = (props) => {
   return (
     <React.Fragment>
       <ErrorModal error={error} onClear={clearError} />
-      <Card className="authentication">
+      <Card className="auth">
         <h2>Login Required</h2>
         <hr />
         <form onSubmit={authSubmitHandler}>

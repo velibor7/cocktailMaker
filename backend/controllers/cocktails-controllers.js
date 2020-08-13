@@ -30,6 +30,8 @@ const getCocktails = async (req, res, next) => {
 const getCocktailById = async (req, res, next) => {
   const cocktailId = req.params.cid;
 
+  console.log(cocktailId);
+
   let cocktail;
   try {
     console.log("TRYIN");
@@ -136,7 +138,7 @@ const createCocktail = async (req, res, next) => {
 };
 
 const updateCocktail = async (req, res, next) => {
-  const errors = validationResult(req);
+  const error = validationResult(req);
   if (!error.isEmpty()) {
     return next(new HttpError("Invalid inputs, check your data", 422));
   }

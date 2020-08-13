@@ -28,16 +28,6 @@ const MainNavigation = (props) => {
       </Drawer>
 
       <MainHeader>
-        {/*
-        <button
-          className="main-navigation__menu-btn"
-          onClick={openDrawerHandler}
-        >
-          <span />
-          <span />
-          <span />
-        </button> */}
-
         <svg
           xmlns="http://www.w3.org/2000/svg"
           height="24"

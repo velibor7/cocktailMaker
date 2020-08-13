@@ -55,12 +55,16 @@ const CocktailItem = (props) => {
         footer={
           <React.Fragment>
             <div className="cocktail-item__actions">
-              <Button inverse to={`/cocktails/${props.id}`}>
-                UPDATE
-              </Button>
-              <Button danger onClick={showDeleteWarningHandler}>
-                DELETE
-              </Button>
+              {auth.userId === props.creatorId && (
+                <Button inverse to={`/cocktails/${props.id}`}>
+                  UPDATE
+                </Button>
+              )}
+              {auth.userId === props.creatorId && (
+                <Button danger onClick={showDeleteWarningHandler}>
+                  DELETE
+                </Button>
+              )}
             </div>
           </React.Fragment>
         }

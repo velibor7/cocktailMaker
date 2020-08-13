@@ -50,13 +50,16 @@ const getCocktailById = async (req, res, next) => {
 
 const getCocktailsByUserId = async (req, res, next) => {
   const userId = req.params.uid;
+  console.log(userId);
 
   let userWithCocktails;
 
   try {
     userWithCocktails = await User.findById(userId).populate("cocktails");
+    console.log(userWithCocktails);
   } catch (err) {
     const error = new HttpError("Fetching failed, please try again", 500);
+    console.log(err);
     return next(error);
   }
 
